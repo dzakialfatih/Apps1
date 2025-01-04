@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Prambors</string>
+    <string name="name">Nama Podcast</string>
+    <string name="tittle">Judul Podcast</string>
+    <string name="name_singer">Nama Penyanyi</string>
+    <string name="tittle_song">Judul Lagu</string>
+    <string name="total">Jumlah Podcast</string>
+    <string name="menu">Menu</string>
+    <string name="radio">Radio</string>
+    <string name="podcast">Podcast</string>
+    <string name="searchbar_hint">Cari Podcast apa niiii....</string>
+    <string name="searchbar_hint_who">Cari Podcast siapa niiii....</string>
+    <string name="description">Deskripsi singkat</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="title_activity_podcast">PodcastActivity</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
