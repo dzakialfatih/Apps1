@@ -3,29 +3,37 @@ package com.example.apps1.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.apps1.MainActivity
+import com.example.apps1.R
 
-class PodcastListAdapter(private val dataList: List<String>) : RecyclerView.Adapter<PodcastListAdapter.ViewHolder>() {
+class PodcastListAdapter(private val podcasts: List<MainActivity.Podcast>) :
+    RecyclerView.Adapter<PodcastListAdapter.PodcastViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(android.R.id.text1)
+    data class Podcast(val title: String)
+
+    inner class PodcastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val podcastTitle: TextView = itemView.findViewById(R.id.tv_item_name)
+        val podcastNameTitle: TextView = itemView.findViewById(R.id.tv_item_name_podcast)
+        val podcastDescTitle: TextView = itemView.findViewById(R.id.tv_item_description)
+        val imageView: ImageView = itemView.findViewById(R.id.img_item_photo)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PodcastViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.podcast_list, parent, false)
+        return PodcastViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = dataList[position]
-        holder.textView.setOnClickListener {
-            Toast.makeText(holder.itemView.context, "Clicked: ${dataList[position]}", Toast.LENGTH_SHORT).show()
-        }
+    override fun onBindViewHolder(holder: PodcastViewHolder, position: Int) {
+        val podcast = podcasts[position]
+        holder.podcastTitle.text = podcast.title
+        holder.podcastNameTitle.text = podcast.name
+        holder.podcastDescTitle.text = podcast.description
+        holder.imageView.setImageResource(R.drawable.logo_circle_medium)
     }
 
-    override fun getItemCount(): Int {
-        return dataList.size
-    }
+    override fun getItemCount() = podcasts.size
 }

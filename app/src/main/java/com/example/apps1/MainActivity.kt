@@ -1,54 +1,70 @@
 package com.example.apps1
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.apps1.Activity.PodcastActivity
 import com.example.apps1.Adapter.PodcastListAdapter
 import com.example.apps1.Adapter.RecentSongAdapter
 
 class MainActivity : AppCompatActivity() {
+    data class Song(val title: String, val artist: String)
+    data class Podcast(val title: String, val description: String, val name: String)
+    data class Podcaster(val title: String, val description: String)
+
 
     private var mediaPlayer: MediaPlayer? = null
+    private var isPrepared: Boolean = false
     private var isPlaying: Boolean = false
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         try {
-            // Preload radio
+            progressBar = findViewById(R.id.radioProgressBar)
+
+            // Preload radio saat aplikasi diluncurkan
             preloadRadio("https://s1.cloudmu.id/listen/prambors_fm/radio.mp3")
 
-            // Inisialisasi tombol ImageButton untuk Play/Pause
+            // Inisialisasi tombol Play/Pause untuk radio
             val radioButton: ImageButton = findViewById(R.id.radioButton)
             radioButton.setOnClickListener {
                 if (isPlaying) {
                     stopRadio()
                     Toast.makeText(this, "Radio Stopped", Toast.LENGTH_SHORT).show()
-                } else {
+                } else if (isPrepared) {
                     startRadio()
                     Toast.makeText(this, "Radio Playing", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Radio is not ready yet. Please wait.", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            // Inisialisasi tombol Button untuk podcast
-            val button2: Button = findViewById(R.id.buttonPodcast)
-            button2.setOnClickListener {
-                Toast.makeText(this, "Button 2 Clicked!", Toast.LENGTH_SHORT).show()
+            // Inisialisasi tombol untuk podcast
+            val buttonPodcast: Button = findViewById(R.id.buttonPodcast)
+            buttonPodcast.setOnClickListener {
+                val intent = Intent(this, PodcastActivity::class.java)
+                startActivity(intent)
             }
 
-            // Inisialisasi RecyclerView untuk menampilkan daftar lagu
+            // Inisialisasi RecyclerView untuk daftar lagu
             val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-            recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL , false)
             recyclerView.adapter = RecentSongAdapter(getDummyDataSong())
 
-            // Inisialisasi RecyclerView untuk menampilkan nama podcast
+            // Inisialisasi RecyclerView untuk daftar podcast
             val recyclerViewNamePodcast: RecyclerView = findViewById(R.id.recyclerViewNamePodcast)
             recyclerViewNamePodcast.layoutManager = LinearLayoutManager(this)
             recyclerViewNamePodcast.adapter = PodcastListAdapter(getDummyData())
@@ -60,39 +76,51 @@ class MainActivity : AppCompatActivity() {
     // Fungsi untuk preload radio
     private fun preloadRadio(url: String) {
         try {
+            progressBar.visibility = View.VISIBLE
             mediaPlayer = MediaPlayer().apply {
                 setDataSource(url)
                 setOnPreparedListener {
+                    isPrepared = true
+                    progressBar.visibility = View.GONE
                     Log.d("MainActivity", "Radio is preloaded and ready to play.")
-                    // Pastikan radio dapat diputar saat sudah siap
-                    startRadio()
                 }
-                setOnErrorListener { mp, what, extra ->
+                setOnErrorListener { _, what, extra ->
+                    isPrepared = false
+                    progressBar.visibility = View.GONE
                     Log.e("MainActivity", "Error during playback: $what, $extra")
                     true
                 }
-                prepareAsync() // Preload secara asinkron
+                prepareAsync()
             }
         } catch (e: Exception) {
+            progressBar.visibility = View.GONE
             Log.e("MainActivity", "Error preloading radio: ${e.message}")
         }
     }
 
-    // Mulai pemutaran radio setelah mediaPlayer siap
+    // Mulai pemutaran radio
     private fun startRadio() {
         try {
-            mediaPlayer?.start()
-            isPlaying = true
+            mediaPlayer?.let {
+                if (isPrepared && !isPlaying) {
+                    it.start()
+                    isPlaying = true
+                }
+            }
         } catch (e: Exception) {
             Log.e("MainActivity", "Error starting radio: ${e.message}")
         }
     }
 
-    // Fungsi untuk menghentikan pemutaran radio
+    // Hentikan pemutaran radio
     private fun stopRadio() {
         try {
-            mediaPlayer?.pause() // Pause untuk menjaga preload tetap terjaga
-            isPlaying = false
+            mediaPlayer?.let {
+                if (isPlaying) {
+                    it.pause()
+                    isPlaying = false
+                }
+            }
         } catch (e: Exception) {
             Log.e("MainActivity", "Error stopping radio: ${e.message}")
         }
@@ -100,38 +128,40 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopAndReleaseRadio() // Lepaskan sumber daya MediaPlayer saat Activity dihancurkan
+        stopAndReleaseRadio()
     }
 
-    // Fungsi untuk menghentikan dan melepaskan MediaPlayer sepenuhnya
+    // Hentikan dan lepaskan MediaPlayer
     private fun stopAndReleaseRadio() {
         try {
             mediaPlayer?.release()
             mediaPlayer = null
             isPlaying = false
+            isPrepared = false
         } catch (e: Exception) {
             Log.e("MainActivity", "Error releasing MediaPlayer: ${e.message}")
         }
     }
 
-    // Fungsi untuk mendapatkan data dummy
-    private fun getDummyData(): List<String> {
+    // Data dummy untuk lagu
+    private fun getDummyDataSong(): List<Song> {
         return listOf(
-            "Podcast 1",
-            "Podcast 2",
-            "Podcast 3",
-            "Podcast 4",
-            "Podcast 5"
+            Song("Song 1", "Artist 1"),
+            Song("Song 2", "Artist 2"),
+            Song("Song 3", "Artist 3"),
+            Song("Song 4", "Artist 4"),
+            Song("Song 5", "Artist 5")
         )
     }
 
-    private fun getDummyDataSong(): List<String> {
+    // Data dummy untuk podcast
+    private fun getDummyData(): List<Podcast> {
         return listOf(
-            "Song 1",
-            "Song 2",
-            "Song 3",
-            "Song 4",
-            "Song 5"
+            Podcast("Judul Podcast 1", "Description 1", "Nama Podcaster 1"),
+            Podcast("Judul Podcast 2", "Description 2", "Nama Podcaster 2"),
+            Podcast("Judul Podcast 3", "Description 3", "Nama Podcaster 3"),
+            Podcast("Judul Podcast 4", "Description 4", "Nama Podcaster 4"),
+            Podcast("Judul Podcast 5", "Description 5", "Nama Podcaster 5")
         )
     }
 }

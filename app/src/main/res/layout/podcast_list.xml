@@ -60,7 +60,7 @@
             tools:text="@string/description" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tv_item_name_podcast"
             android:layout_width="235dp"
             android:layout_height="28dp"
             android:layout_marginStart="8dp"
@@ -80,7 +80,7 @@
             android:scaleType="centerCrop"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/textView3"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_item_name_podcast"
             card_view:layout_constraintTop_toBottomOf="@+id/tv_item_description"
             card_view:srcCompat="@drawable/play_icon_foreground"
             tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />

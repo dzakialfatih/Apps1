@@ -1,42 +1,53 @@
 package com.example.apps1.Activity
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.apps1.Adapter.PodcastListAdapter
+import com.example.apps1.Adapter.PodcasterListAdapter
+import com.example.apps1.MainActivity.Podcast
 import com.example.apps1.R
 
 class PodcastActivity : AppCompatActivity() {
+    data class Podcaster(val title: String, val description: String)
 
-    private lateinit var button2: Button
-
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_podcast)
 
-        // Initialize views after setContentView
-        button2 = findViewById(R.id.button2)
+        // Inisialisasi RecyclerView untuk daftar podcast
+        val recyclerViewPodcasts = findViewById<RecyclerView>(R.id.recyclerViewPodcasts)
+        recyclerViewPodcasts.layoutManager = LinearLayoutManager(this)
+        recyclerViewPodcasts.adapter = PodcastListAdapter(getDummyData())
 
-        // Set click listener for the button
-        button2.setOnClickListener {
-            val intent = Intent(this, NamePodcastActivity::class.java)
-            startActivity(intent)
-        }
+        // Inisialisasi RecyclerView untuk daftar podcaster
+        val recyclerViewPodcaster: RecyclerView = findViewById(R.id.recyclerViewNamePodcast)
+        recyclerViewPodcaster.layoutManager = GridLayoutManager(this, 2) // 2 kolom
+        recyclerViewPodcaster.adapter = PodcasterListAdapter(getDummyDataPodcaster())
 
-        val rootLayout = findViewById<ConstraintLayout>(R.id.main) // Assuming your root view is a ConstraintLayout with id "main"
-        if (rootLayout != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(rootLayout) { v, insets ->
-                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-                insets
-            }
-        }
+    }
+
+    // Fungsi untuk data dummy podcast
+    private fun getDummyData(): List<Podcast> {
+        return listOf(
+            Podcast("Judul Podcast 1", "Description 1", "Nama Podcaster 1"),
+            Podcast("Judul Podcast 2", "Description 2", "Nama Podcaster 2"),
+            Podcast("Judul Podcast 3", "Description 3", "Nama Podcaster 3"),
+            Podcast("Judul Podcast 4", "Description 4", "Nama Podcaster 4"),
+            Podcast("Judul Podcast 5", "Description 5", "Nama Podcaster 5")
+        )
+    }
+
+    // Fungsi untuk data dummy podcaster
+    private fun getDummyDataPodcaster(): List<Podcaster> {
+        return listOf(
+            Podcaster("Podcaster 1", "Description 1"),
+            Podcaster("Podcaster 2", "Description 2"),
+            Podcaster("Podcaster 3", "Description 3"),
+            Podcaster("Podcaster 4", "Description 4"),
+            Podcaster("Podcaster 5", "Description 5")
+        )
     }
 }

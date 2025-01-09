@@ -46,7 +46,7 @@
             tools:text="@string/tittle_song" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tv_item_artist"
             android:layout_width="235dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
