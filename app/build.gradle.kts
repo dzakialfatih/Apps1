@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id ("kotlin-parcelize")
+
 }
 
 android {
@@ -15,7 +17,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "KEY", "\"0f99f7ec4378ae2d:ea74c08f0cf3cd44aad2386ef5b95833\"")
+        buildConfigField("String", "KEY", "\"10a18f33fe3b1a28:c597e88d38af5cfb78e08b232a25f063\"")
     }
 
     buildTypes {
@@ -57,9 +59,10 @@ dependencies {
     testImplementation(libs.junit)
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation ("com.github.bumptech.glide:okhttp3-integration:4.15.0")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation ("com.google.android.exoplayer:exoplayer:2.19.0")
-
 
 }

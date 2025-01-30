@@ -1,7 +1,6 @@
 package com.example.apps1
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,24 +14,47 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apps1.Activity.PodcastActivity
 import com.example.apps1.Adapter.PodcastListAdapter
 import com.example.apps1.Adapter.RecentSongAdapter
+import com.example.apps1.response.ResponsePodcast
+import com.example.apps1.response.SongHistoryItem
+import com.example.apps1.retrofit.ApiConfig
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackException
+import com.google.android.exoplayer2.Player
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
-    data class Song(val title: String, val artist: String)
     data class Podcast(val title: String, val description: String, val name: String)
     data class Podcaster(val title: String, val description: String)
+    data class Song(val title: String, val artist: String)
 
 
-    private var mediaPlayer: MediaPlayer? = null
+    private lateinit var exoPlayer: ExoPlayer
     private var isPrepared: Boolean = false
     private var isPlaying: Boolean = false
     private lateinit var progressBar: ProgressBar
+
+    private lateinit var recyclerViewPodcasts: RecyclerView
+    private lateinit var podcastAdapter: PodcastListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         try {
+            // ProgressBar untuk loading radio
             progressBar = findViewById(R.id.radioProgressBar)
+            progressBar.visibility = View.VISIBLE
 
             // Preload radio saat aplikasi diluncurkan
             preloadRadio("https://s1.cloudmu.id/listen/prambors_fm/radio.mp3")
@@ -59,15 +81,61 @@ class MainActivity : AppCompatActivity() {
             }
 
             // Inisialisasi RecyclerView untuk daftar lagu
-            val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-            recyclerView.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.VERTICAL , false)
-            recyclerView.adapter = RecentSongAdapter(getDummyDataSong())
+            val recyclerViewSong: RecyclerView = findViewById(R.id.recyclerView)
+            recyclerViewSong.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-            // Inisialisasi RecyclerView untuk daftar podcast
-            val recyclerViewNamePodcast: RecyclerView = findViewById(R.id.recyclerViewNamePodcast)
-            recyclerViewNamePodcast.layoutManager = LinearLayoutManager(this)
-            recyclerViewNamePodcast.adapter = PodcastListAdapter(getDummyData())
+            // Fetch data dari API
+            val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+            val todayDate = dateFormat.format(Date()) // Dapatkan tanggal hari ini
+            val apiService = ApiConfig.getApiService()
+            apiService.getSongs(todayDate).enqueue(object : Callback<List<SongHistoryItem>> {
+                override fun onResponse(
+                    call: Call<List<SongHistoryItem>>,
+                    response: Response<List<SongHistoryItem>>
+                ) {
+                    if (response.isSuccessful) {
+                        val songHistoryItems = response.body() ?: emptyList()
+
+                        // Inisialisasi RecyclerView dan Adapter
+                        val adapter = RecentSongAdapter(songHistoryItems)
+                        recyclerViewSong.adapter = adapter
+                        recyclerViewSong.layoutManager = LinearLayoutManager(this@MainActivity)
+                    }
+                }
+
+                override fun onFailure(call: Call<List<SongHistoryItem>>, t: Throwable) {
+                    // Tangani kesalahan jaringan
+                    Log.e("API_ERROR", t.message.toString())
+                }
+            })
+
+            // Inisialisasi RecyclerView
+            recyclerViewPodcasts = findViewById(R.id.recyclerViewNamePodcast)
+            recyclerViewPodcasts.layoutManager = LinearLayoutManager(this)
+            // Inisialisasi Adapter
+            podcastAdapter = PodcastListAdapter(emptyList())
+            recyclerViewPodcasts.adapter = podcastAdapter
+
+            apiService.getPodcast().enqueue(object : Callback<List<ResponsePodcast>> {
+                override fun onResponse(
+                    call: Call<List<ResponsePodcast>>,
+                    response: Response<List<ResponsePodcast>>
+                ) {
+                    if (response.isSuccessful) {
+                        val podcastList = response.body() ?: emptyList()
+
+                        // Perbarui adapter dengan data dari API
+                        podcastAdapter.updateData(podcastList)
+                    }
+                }
+
+                override fun onFailure(call: Call<List<ResponsePodcast>>, t: Throwable) {
+                    Log.e("API_ERROR", t.message.toString())
+                }
+
+            })
+
+            progressBar.visibility = View.GONE // Sembunyikan progressBar jika semua berhasil
         } catch (e: Exception) {
             Log.e("MainActivity", "Error initializing views: ${e.message}")
         }
@@ -77,20 +145,32 @@ class MainActivity : AppCompatActivity() {
     private fun preloadRadio(url: String) {
         try {
             progressBar.visibility = View.VISIBLE
-            mediaPlayer = MediaPlayer().apply {
-                setDataSource(url)
-                setOnPreparedListener {
-                    isPrepared = true
-                    progressBar.visibility = View.GONE
-                    Log.d("MainActivity", "Radio is preloaded and ready to play.")
-                }
-                setOnErrorListener { _, what, extra ->
-                    isPrepared = false
-                    progressBar.visibility = View.GONE
-                    Log.e("MainActivity", "Error during playback: $what, $extra")
-                    true
-                }
-                prepareAsync()
+
+            // Inisialisasi ExoPlayer
+            exoPlayer = ExoPlayer.Builder(this).build().apply {
+                val mediaItem = MediaItem.fromUri(url)
+                setMediaItem(mediaItem)
+
+                // Listener untuk mengetahui status siap
+                addListener(object : Player.Listener {
+                    override fun onPlaybackStateChanged(playbackState: Int) {
+                        when (playbackState) {
+                            Player.STATE_READY -> {
+                                isPrepared = true
+                                progressBar.visibility = View.GONE
+                                Log.d("MainActivity", "Radio is preloaded and ready to play.")
+                            }
+                            Player.STATE_ENDED -> Log.d("MainActivity", "Playback ended.")
+                            Player.STATE_BUFFERING -> Log.d("MainActivity", "Buffering...")
+                            Player.STATE_IDLE -> Log.d("MainActivity", "Player is idle.")
+                        }
+                    }
+
+                    override fun onPlayerError(error: PlaybackException) {
+                        Log.e("MainActivity", "Error during playback: ${error.message}")
+                    }
+                })
+                prepare() // Siapkan media
             }
         } catch (e: Exception) {
             progressBar.visibility = View.GONE
@@ -101,26 +181,26 @@ class MainActivity : AppCompatActivity() {
     // Mulai pemutaran radio
     private fun startRadio() {
         try {
-            mediaPlayer?.let {
-                if (isPrepared && !isPlaying) {
-                    it.start()
-                    isPlaying = true
-                }
+            if (isPrepared) {
+                exoPlayer.play()
+                isPlaying = true
+                Log.d("MainActivity", "Radio started playing.")
+                Log.d("MainActivity", "Radio started.")
+            } else {
+                Log.d("MainActivity", "Radio is not ready yet.")
             }
         } catch (e: Exception) {
             Log.e("MainActivity", "Error starting radio: ${e.message}")
         }
     }
 
+
     // Hentikan pemutaran radio
     private fun stopRadio() {
         try {
-            mediaPlayer?.let {
-                if (isPlaying) {
-                    it.pause()
-                    isPlaying = false
-                }
-            }
+            exoPlayer.pause()  // Hentikan pemutaran
+            isPlaying = false
+            Log.d("MainActivity", "Radio stopped and player released.")
         } catch (e: Exception) {
             Log.e("MainActivity", "Error stopping radio: ${e.message}")
         }
@@ -128,40 +208,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopAndReleaseRadio()
+        exoPlayer.release()  // Lepaskan ExoPlayer
+
     }
 
-    // Hentikan dan lepaskan MediaPlayer
-    private fun stopAndReleaseRadio() {
-        try {
-            mediaPlayer?.release()
-            mediaPlayer = null
-            isPlaying = false
-            isPrepared = false
-        } catch (e: Exception) {
-            Log.e("MainActivity", "Error releasing MediaPlayer: ${e.message}")
-        }
-    }
-
-    // Data dummy untuk lagu
-    private fun getDummyDataSong(): List<Song> {
-        return listOf(
-            Song("Song 1", "Artist 1"),
-            Song("Song 2", "Artist 2"),
-            Song("Song 3", "Artist 3"),
-            Song("Song 4", "Artist 4"),
-            Song("Song 5", "Artist 5")
-        )
-    }
-
-    // Data dummy untuk podcast
-    private fun getDummyData(): List<Podcast> {
-        return listOf(
-            Podcast("Judul Podcast 1", "Description 1", "Nama Podcaster 1"),
-            Podcast("Judul Podcast 2", "Description 2", "Nama Podcaster 2"),
-            Podcast("Judul Podcast 3", "Description 3", "Nama Podcaster 3"),
-            Podcast("Judul Podcast 4", "Description 4", "Nama Podcaster 4"),
-            Podcast("Judul Podcast 5", "Description 5", "Nama Podcaster 5")
-        )
-    }
 }

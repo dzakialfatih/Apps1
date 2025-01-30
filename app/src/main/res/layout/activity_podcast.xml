@@ -70,7 +70,7 @@
         tools:ignore="UseAppTint" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewNamePodcast"
+        android:id="@+id/recyclerViewNamePodcaster"
         android:layout_width="410dp"
         android:layout_height="275dp"
         app:layout_constraintEnd_toEndOf="parent"

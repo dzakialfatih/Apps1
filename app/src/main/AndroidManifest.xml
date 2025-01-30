@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <meta-data
+        android:name="com.nekodev.paulina.sadowska.glideheadersdemo.GlideModuleWithHeaders"
+        android:value="GlideModule" />
 
     <application
         android:allowBackup="true"
