@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.apps1.Activity.DetailPodcastActivity
 import com.example.apps1.Activity.PodcastActivity
 import com.example.apps1.Adapter.PodcastListAdapter
 import com.example.apps1.Adapter.RecentSongAdapter
@@ -113,7 +114,15 @@ class MainActivity : AppCompatActivity() {
             recyclerViewPodcasts = findViewById(R.id.recyclerViewNamePodcast)
             recyclerViewPodcasts.layoutManager = LinearLayoutManager(this)
             // Inisialisasi Adapter
-            podcastAdapter = PodcastListAdapter(emptyList())
+            podcastAdapter = PodcastListAdapter(emptyList()) { selectedPodcast ->
+                val intent = Intent(this, DetailPodcastActivity::class.java)
+                intent.putExtra("PODCAST_TITLE", selectedPodcast.title)
+                intent.putExtra("PODCAST_IMAGE", selectedPodcast.art)
+                intent.putExtra("PODCAST_DESCRIPTION", selectedPodcast.description)
+                intent.putExtra("PODCAST_COUNT", selectedPodcast.episodes)
+
+                startActivity(intent)
+            }
             recyclerViewPodcasts.adapter = podcastAdapter
 
             apiService.getPodcast().enqueue(object : Callback<List<ResponsePodcast>> {

@@ -20,12 +20,6 @@ class PodcasterListAdapter(private var podcaster: List<ResponsePodcast>) :
         val podcasterName: TextView = itemView.findViewById(R.id.podcaster)
         val description: TextView = itemView.findViewById(R.id.tv_item_description)
         val imageView: ImageView = itemView.findViewById(R.id.img_item_podcaster)
-
-        fun bind(podcaster: PodcastActivity.Podcaster) {
-            podcasterName.text = podcaster.title
-            description.text = podcaster.description
-            imageView.setImageResource(R.drawable.logo_circle_medium) // Ganti dengan gambar
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PodcasterViewHolder {

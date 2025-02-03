@@ -21,7 +21,8 @@ import com.bumptech.glide.request.target.Target
 import com.example.apps1.HeaderLoader
 
 
-class PodcastListAdapter(private var podcasts: List<ResponsePodcast>) :
+class PodcastListAdapter(private var podcasts: List<ResponsePodcast>, private val onItemClick: (ResponsePodcast) -> Unit // Tambahkan callback klik
+) :
     RecyclerView.Adapter<PodcastListAdapter.PodcastViewHolder>() {
 
     inner class PodcastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -47,6 +48,11 @@ class PodcastListAdapter(private var podcasts: List<ResponsePodcast>) :
             .load(HeaderLoader.getUrlWithHeaders(podcast.art.toString()))
             .error(R.drawable.logo_circle_medium)
             .into(holder.imageView)
+
+        // Set klik listener
+        holder.itemView.setOnClickListener {
+            onItemClick(podcast)
+        }
     }
 
     override fun getItemCount() = podcasts.size
