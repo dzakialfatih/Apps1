@@ -46,7 +46,7 @@ class PodcastActivity : AppCompatActivity() {
         }
         recyclerViewPodcasts.adapter = podcastAdapter
         recyclerViewPodcaster = findViewById(R.id.recyclerViewNamePodcaster)
-        recyclerViewPodcaster.layoutManager = GridLayoutManager(this, 2)
+        recyclerViewPodcaster.layoutManager = LinearLayoutManager(this)
         podcasterAdapter = PodcasterListAdapter(emptyList())
         recyclerViewPodcaster.adapter = podcasterAdapter
 

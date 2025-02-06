@@ -1,161 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    app:srcCompat="@drawable/bg2"
-    tools:context=".MainActivity">
+    android:fillViewport="true">
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/bg3" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/yellow"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/radioButton"
-        android:layout_width="280dp"
-        android:layout_height="292dp"
-        android:layout_marginTop="8dp"
-        android:alpha="0.8"
-        android:background="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:srcCompat="@drawable/logo_circle_medium"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="252dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7"
-        tools:listitem="@layout/song_recent" />
-
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="250dp"
-        android:layout_height="33dp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:srcCompat="@drawable/logo_horizontal_medium" />
-
-
-    <Button
-        android:id="@+id/buttonPodcast"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:alpha="0.3"
-        android:backgroundTint="@color/yellow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:background="@drawable/bg3"
+        tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="183dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="PODCAST"
-        android:textColor="@color/yellow"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonPodcast"
-        app:layout_constraintStart_toStartOf="@+id/buttonPodcast"
-        app:layout_constraintTop_toTopOf="@+id/buttonPodcast" />
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/bg3" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:tint="@color/yellow"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonPodcast"
-        app:layout_constraintEnd_toEndOf="@+id/buttonPodcast"
-        app:layout_constraintTop_toTopOf="@+id/buttonPodcast"
-        app:srcCompat="@drawable/ic_in"
-        tools:ignore="UseAppTint" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/yellow"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/action_menu"
-        android:layout_width="34dp"
-        android:layout_height="29dp"
-        android:layout_marginStart="8dp"
-        android:clickable="true"
-        android:contentDescription="@string/menu"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_menu" />
+        <ImageButton
+            android:id="@+id/radioButton"
+            android:layout_width="280dp"
+            android:layout_height="292dp"
+            android:layout_marginTop="8dp"
+            android:alpha="0.8"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:srcCompat="@drawable/logo_circle_medium" />
 
-    <ImageView
-        android:id="@+id/action_menu2"
-        android:layout_width="39dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="true"
-        android:contentDescription="@string/menu"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_circle_medium" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toBottomOf="@+id/imageView7"
+            tools:listitem="@layout/song_recent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewNamePodcast"
-        android:layout_width="match_parent"
-        android:layout_height="176dp"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPodcast"
-        tools:listitem="@layout/podcast_list" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="250dp"
+            android:layout_height="33dp"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toolbar"
+            app:srcCompat="@drawable/logo_horizontal_medium" />
 
+        <Button
+            android:id="@+id/buttonPodcast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:alpha="0.3"
+            android:backgroundTint="@color/yellow"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="260dp"
-        android:layout_height="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioButton"
-        app:srcCompat="@drawable/recentsongblack" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="183dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="PODCAST"
+            android:textColor="@color/yellow"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonPodcast"
+            app:layout_constraintStart_toStartOf="@+id/buttonPodcast"
+            app:layout_constraintTop_toTopOf="@+id/buttonPodcast" />
 
-    <ProgressBar
-        android:id="@+id/radioProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.259" />
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonPodcast"
+            app:layout_constraintEnd_toEndOf="@+id/buttonPodcast"
+            app:layout_constraintTop_toTopOf="@+id/buttonPodcast"
+            app:srcCompat="@drawable/ic_in" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/action_menu"
+            android:layout_width="34dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:contentDescription="@string/menu"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_menu" />
+
+        <ImageView
+            android:id="@+id/action_menu2"
+            android:layout_width="39dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:contentDescription="@string/menu"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo_circle_medium" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewNamePodcast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPodcast"
+            tools:listitem="@layout/podcast_list" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioButton"
+            app:srcCompat="@drawable/recentsongblack" />
+
+        <ProgressBar
+            android:id="@+id/radioProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.259" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

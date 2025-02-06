@@ -27,7 +27,6 @@ class PodcastListAdapter(private var podcasts: List<ResponsePodcast>, private va
 
     inner class PodcastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val podcastTitle: TextView = itemView.findViewById(R.id.tv_item_name)
-        val podcastNameTitle: TextView = itemView.findViewById(R.id.tv_item_name_podcast)
         val podcastDescTitle: TextView = itemView.findViewById(R.id.tv_item_description)
         val imageView: ImageView = itemView.findViewById(R.id.img_item_podcast)
     }
@@ -41,9 +40,16 @@ class PodcastListAdapter(private var podcasts: List<ResponsePodcast>, private va
     override fun onBindViewHolder(holder: PodcastViewHolder, position: Int) {
         val podcast = podcasts[position]
         holder.podcastTitle.text = podcast.title
-        holder.podcastNameTitle.text = podcast.author
-        Log.d("link", "${podcast.links?.art}")
-        holder.podcastDescTitle.text = podcast.descriptionShort
+        val maxLength = 50 // Panjang maksimum karakter yang diinginkan
+        val fullDescription = podcast.description
+        Log.d("Deskripsi" , "${podcast.description}")
+        if (fullDescription != null) {
+            holder.podcastDescTitle.text = if (fullDescription.length > maxLength) {
+                "${fullDescription?.substring(0, maxLength)}..."
+            } else {
+                fullDescription
+            }
+        }
         Glide.with(holder.itemView.context)
             .load(HeaderLoader.getUrlWithHeaders(podcast.art.toString()))
             .error(R.drawable.logo_circle_medium)

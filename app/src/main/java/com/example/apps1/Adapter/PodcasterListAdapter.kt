@@ -30,8 +30,16 @@ class PodcasterListAdapter(private var podcaster: List<ResponsePodcast>) :
 
     override fun onBindViewHolder(holder: PodcasterViewHolder, position: Int) {
         val podcast = podcaster[position]
-        holder.podcasterName.text = podcast.author
-        holder.description.text = podcast.descriptionShort
+        holder.podcasterName.text = podcast.author ?: "Prambors"
+        val maxLength = 50 // Panjang maksimum karakter yang diinginkan
+        val fullDescription = podcast.description
+        if (fullDescription != null) {
+            holder.description.text = if (fullDescription.length > maxLength) {
+                "${fullDescription?.substring(0, maxLength)}..."
+            } else {
+                fullDescription
+            }
+        }
         Glide.with(holder.itemView.context)
             .load(HeaderLoader.getUrlWithHeaders(podcast.art.toString()))
             .error(R.drawable.logo_circle_medium)

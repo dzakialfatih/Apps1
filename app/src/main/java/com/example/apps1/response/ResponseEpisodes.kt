@@ -1,7 +1,7 @@
 package com.example.apps1.response
 
-import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ResponseEpisodes(

@@ -11,29 +11,29 @@ import com.bumptech.glide.Glide
 import com.example.apps1.HeaderLoader
 import com.example.apps1.R
 import com.example.apps1.response.ResponseEpisodes
+import com.example.apps1.response.ResponseMedia
 import com.example.apps1.response.ResponsePodcast
 
 
-class EpisodesListAdapter(private var episodes: List<ResponseEpisodes> ,
-//                          private val onItemClick: (ResponseEpisodes) -> Unit // Listener untuk item klik
+class MediaListAdapter(private var media: List<ResponseMedia>,
 
-) :
-    RecyclerView.Adapter<EpisodesListAdapter.EpisodesViewHolder>() {
+                       ) :
+    RecyclerView.Adapter<MediaListAdapter.MediaViewHolder>() {
 
-    inner class EpisodesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.tv_item_name)
         val desc: TextView = itemView.findViewById(R.id.tv_item_description)
         val imageView: ImageView = itemView.findViewById(R.id.img_item_podcast)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.episodes_list, parent, false)
-        return EpisodesViewHolder(view)
+        return MediaViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: EpisodesListAdapter.EpisodesViewHolder, position: Int) {
-        val podcast = episodes[position]
+    override fun onBindViewHolder(holder: MediaListAdapter.MediaViewHolder, position: Int) {
+        val podcast = media[position]
         holder.title.text = podcast.title
         val maxLength = 50 // Panjang maksimum karakter yang diinginkan
         val fullDescription = podcast.description
@@ -50,15 +50,13 @@ class EpisodesListAdapter(private var episodes: List<ResponseEpisodes> ,
             .error(R.drawable.logo_circle_medium)
             .into(holder.imageView)
 
-//        onItemClick(podcast) // Panggil listener saat item diklik
-
     }
 
 
-    override fun getItemCount() = episodes.size
+    override fun getItemCount() = media.size
 
-    fun updateData(newEpisodes: List<ResponseEpisodes>) {
-        episodes = newEpisodes
+    fun updateData(newMedia: List<ResponseMedia>) {
+        media = newMedia
         notifyDataSetChanged()
     }
 }

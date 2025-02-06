@@ -46,10 +46,11 @@
 
         <TextView
             android:id="@+id/tv_item_description"
-            android:layout_width="292dp"
-            android:layout_height="31dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:ellipsize="end"
-            android:maxLines="5"
+            android:maxLines="2"
             android:textColor="@color/white"
             card_view:layout_constraintBottom_toBottomOf="@+id/img_item_podcast"
             card_view:layout_constraintEnd_toEndOf="@+id/tv_item_name"
@@ -59,18 +60,6 @@
             card_view:layout_constraintVertical_bias="0.0"
             tools:text="@string/description" />
 
-        <TextView
-            android:id="@+id/tv_item_name_podcast"
-            android:layout_width="235dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="8dp"
-            android:text="TextView"
-            android:textColor="@color/white"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/img_item_podcast"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_item_description"
-            card_view:layout_constraintVertical_bias="1.0"
-            tools:text="@string/name" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -80,7 +69,6 @@
             android:scaleType="centerCrop"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/tv_item_name_podcast"
             card_view:layout_constraintTop_toBottomOf="@+id/tv_item_description"
             card_view:srcCompat="@drawable/play_icon_foreground"
             tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />

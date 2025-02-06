@@ -96,9 +96,10 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val songHistoryItems = response.body() ?: emptyList()
+                        val limitedSongs = songHistoryItems.take(5) // Ambil hanya 5 item pertama
 
                         // Inisialisasi RecyclerView dan Adapter
-                        val adapter = RecentSongAdapter(songHistoryItems)
+                        val adapter = RecentSongAdapter(limitedSongs)
                         recyclerViewSong.adapter = adapter
                         recyclerViewSong.layoutManager = LinearLayoutManager(this@MainActivity)
                     }
