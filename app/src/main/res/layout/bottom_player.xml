@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="#000000"
+    android:elevation="8dp"
+    android:gravity="center_vertical">
+
+    <!-- Gambar Podcast -->
+    <ImageView
+        android:id="@+id/imgMiniPlayer"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo_circle_small"
+        />
+
+    <!-- Nama Podcast -->
+    <TextView
+        android:id="@+id/tvMiniPlayerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:maxLines="1"
+        android:textColor="#FFF"
+        android:text="Podcast Episode 1"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:paddingStart="10dp"/>
+
+    <!-- Tombol Play/Pause -->
+    <ImageButton
+        android:id="@+id/btnPlayPause"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerCrop"
+        android:background="@android:color/transparent"
+        android:src="@drawable/play_icon_foreground"
+        android:contentDescription="Play/Pause"/>
+</LinearLayout>

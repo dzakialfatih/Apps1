@@ -13,7 +13,9 @@ import com.example.apps1.HeaderLoader
 import com.example.apps1.R
 import com.example.apps1.response.ResponsePodcast
 
-class PodcasterListAdapter(private var podcaster: List<ResponsePodcast>) :
+class PodcasterListAdapter(private var podcaster: List<ResponsePodcast>,
+                           private val onItemClick: (ResponsePodcast) -> Unit // Tambahkan callback klik
+    ) :
     RecyclerView.Adapter<PodcasterListAdapter.PodcasterViewHolder>() {
 
     inner class PodcasterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -44,7 +46,11 @@ class PodcasterListAdapter(private var podcaster: List<ResponsePodcast>) :
             .load(HeaderLoader.getUrlWithHeaders(podcast.art.toString()))
             .error(R.drawable.logo_circle_medium)
             .into(holder.imageView)
-    }
+
+        // Set klik listener
+        holder.itemView.setOnClickListener {
+            onItemClick(podcast)
+        }    }
 
     override fun getItemCount(): Int = podcaster.size
 

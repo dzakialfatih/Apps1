@@ -100,5 +100,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/episodes_list" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

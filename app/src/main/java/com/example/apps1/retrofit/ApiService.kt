@@ -25,7 +25,9 @@ interface ApiService {
     fun getEpisodes(@Path("podcastId") podcastId: String): Call<List<ResponseEpisodes>>
 
 
-    @GET("station/18/podcast/{podcastId}/episode/{id}")
-    fun getDetailEpisode(@Path("podcastId") podcastId: String, @Path("id") id: String): Call<List<ResponseMedia>>
+    @GET("station/18/podcast/{podcastId}/episode/{episodeId}")
+    fun getDetailEpisode(@Path("podcastId") podcastId: String,
+                         @Path("episodeId") episodeId: String
+    ): Call<ResponseMedia>
 
 }

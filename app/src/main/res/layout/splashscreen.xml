@@ -3,14 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    tools:background="@drawable/login_bg"
+    >
+
 
     <ImageView
         android:id="@+id/iv_logo"
         app.layout_constraintLeft_toLeftOf="parent"
         android:layout_width="428dp"
         android:layout_height="787dp"
-        android:src="@drawable/login_bg"
+        android:background="@drawable/login_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.529"

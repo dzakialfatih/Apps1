@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -8,6 +10,10 @@ plugins {
 android {
     namespace = "com.example.apps1"
     compileSdk = 34
+    buildFeatures {
+        viewBinding = true
+    }
+
 
     defaultConfig {
         applicationId = "com.example.apps1"
@@ -43,6 +49,7 @@ android {
 }
 
 dependencies {
+    implementation ("androidx.core:core-splashscreen:1.0.0-beta02")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")

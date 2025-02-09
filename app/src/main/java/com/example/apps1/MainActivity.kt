@@ -1,16 +1,24 @@
 package com.example.apps1
 
+import android.animation.ObjectAnimator
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.apps1.Activity.BaseActivity
 import com.example.apps1.Activity.DetailPodcastActivity
 import com.example.apps1.Activity.PodcastActivity
 import com.example.apps1.Adapter.PodcastListAdapter
@@ -22,6 +30,7 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
+import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,23 +43,49 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
-    data class Podcast(val title: String, val description: String, val name: String)
-    data class Podcaster(val title: String, val description: String)
-    data class Song(val title: String, val artist: String)
-
+class MainActivity : BaseActivity() {
+    override fun getLayoutResource(): Int {
+        return R.layout.activity_main
+    }
 
     private lateinit var exoPlayer: ExoPlayer
     private var isPrepared: Boolean = false
     private var isPlaying: Boolean = false
     private lateinit var progressBar: ProgressBar
+    private var rotateAnimation: ObjectAnimator? = null
+
+    private lateinit var drawerLayout: DrawerLayout
 
     private lateinit var recyclerViewPodcasts: RecyclerView
     private lateinit var podcastAdapter: PodcastListAdapter
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
+        sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
+
+        // Inisialisasi DrawerLayout
+        drawerLayout = findViewById(R.id.drawer_layout)
+        val actionMenu = findViewById<ImageView>(R.id.action_menu)
+        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
+
+        // Buka Sidebar saat Menu Diklik
+        actionMenu.setOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        // Menangani klik pada menu sidebar
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_youtube -> openUrl("https://www.youtube.com/@PramborsRadioOfficial")
+                R.id.nav_instagram -> openUrl("https://www.instagram.com/prambors/")
+                R.id.nav_x -> openUrl("https://x.com/Prambors")
+                R.id.nav_facebook -> openUrl("https://www.facebook.com/prambors")
+            }
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
 
         try {
             // ProgressBar untuk loading radio
@@ -61,18 +96,16 @@ class MainActivity : AppCompatActivity() {
             preloadRadio("https://s1.cloudmu.id/listen/prambors_fm/radio.mp3")
 
             // Inisialisasi tombol Play/Pause untuk radio
-            val radioButton: ImageButton = findViewById(R.id.radioButton)
-            radioButton.setOnClickListener {
-                if (isPlaying) {
-                    stopRadio()
-                    Toast.makeText(this, "Radio Stopped", Toast.LENGTH_SHORT).show()
-                } else if (isPrepared) {
-                    startRadio()
-                    Toast.makeText(this, "Radio Playing", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Radio is not ready yet. Please wait.", Toast.LENGTH_SHORT).show()
-                }
-            }
+//            val radioButton: ImageButton = findViewById(R.id.radioButton)
+//            radioButton.setOnClickListener {
+//                if (isPlaying) {
+//                    stopRadio()
+//                } else if (isPrepared) {
+//                    startRadio()
+//                } else {
+//                    Toast.makeText(this, "Radio is not ready yet. Please wait.", Toast.LENGTH_SHORT).show()
+//                }
+//            }
 
             // Inisialisasi tombol untuk podcast
             val buttonPodcast: Button = findViewById(R.id.buttonPodcast)
@@ -96,6 +129,9 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val songHistoryItems = response.body() ?: emptyList()
+                        if (songHistoryItems.isNotEmpty()) {
+                            sharedViewModel.updateSongTitle(songHistoryItems[0].song.title) // Ambil lagu pertama
+                        }
                         val limitedSongs = songHistoryItems.take(5) // Ambil hanya 5 item pertama
 
                         // Inisialisasi RecyclerView dan Adapter
@@ -116,12 +152,13 @@ class MainActivity : AppCompatActivity() {
             recyclerViewPodcasts.layoutManager = LinearLayoutManager(this)
             // Inisialisasi Adapter
             podcastAdapter = PodcastListAdapter(emptyList()) { selectedPodcast ->
-                val intent = Intent(this, DetailPodcastActivity::class.java)
-                intent.putExtra("PODCAST_TITLE", selectedPodcast.title)
-                intent.putExtra("PODCAST_IMAGE", selectedPodcast.art)
-                intent.putExtra("PODCAST_DESCRIPTION", selectedPodcast.description)
-                intent.putExtra("PODCAST_COUNT", selectedPodcast.episodes)
-
+                val intent = Intent(this, DetailPodcastActivity::class.java).apply {
+                    putExtra("PODCAST_ID", selectedPodcast.id)
+                    putExtra("PODCAST_TITLE", selectedPodcast.title)
+                    putExtra("PODCAST_IMAGE", selectedPodcast.art)
+                    putExtra("PODCAST_DESCRIPTION", selectedPodcast.description)
+                    putExtra("PODCAST_COUNT", selectedPodcast.episodes)
+                }
                 startActivity(intent)
             }
             recyclerViewPodcasts.adapter = podcastAdapter
@@ -151,6 +188,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun openUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
     // Fungsi untuk preload radio
     private fun preloadRadio(url: String) {
         try {
@@ -189,11 +230,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Mulai pemutaran radio
-    private fun startRadio() {
+     fun startRadio() {
         try {
+            val radioButton: ImageButton = findViewById(R.id.radioButton) // Ambil ImageButton
+
             if (isPrepared) {
                 exoPlayer.play()
                 isPlaying = true
+
+                // Buat animasi rotasi hanya jika belum dibuat
+                if (rotateAnimation == null) {
+                    rotateAnimation = ObjectAnimator.ofFloat(radioButton, View.ROTATION, 0f, 360f)
+                    rotateAnimation?.duration = 3000 // 1 detik per putaran
+                    rotateAnimation?.repeatCount = ObjectAnimator.INFINITE // Ulang terus-menerus
+                    rotateAnimation?.interpolator = LinearInterpolator() // Putaran mulus
+                    rotateAnimation?.start()
+                }
+
+                Toast.makeText(this, "Radio Playing", Toast.LENGTH_SHORT).show()
                 Log.d("MainActivity", "Radio started playing.")
                 Log.d("MainActivity", "Radio started.")
             } else {
@@ -206,10 +260,19 @@ class MainActivity : AppCompatActivity() {
 
 
     // Hentikan pemutaran radio
-    private fun stopRadio() {
+    fun stopRadio() {
         try {
             exoPlayer.pause()  // Hentikan pemutaran
             isPlaying = false
+
+            val radioButton: ImageButton = findViewById(R.id.radioButton)
+            // Hentikan animasi dengan membatalkan semua animasi yang berjalan
+            rotateAnimation?.cancel()
+            rotateAnimation = null // Reset agar bisa diputar ulang nanti
+            radioButton.clearAnimation() // (Opsional, untuk berjaga-jaga)
+
+            Toast.makeText(this, "Radio Stopped", Toast.LENGTH_SHORT).show()
+
             Log.d("MainActivity", "Radio stopped and player released.")
         } catch (e: Exception) {
             Log.e("MainActivity", "Error stopping radio: ${e.message}")

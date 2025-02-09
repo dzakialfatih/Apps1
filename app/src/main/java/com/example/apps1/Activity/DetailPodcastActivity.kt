@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +32,7 @@ class DetailPodcastActivity : AppCompatActivity() {
     private lateinit var episodesAdapter: EpisodesListAdapter
 
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_podcast)
@@ -43,29 +44,23 @@ class DetailPodcastActivity : AppCompatActivity() {
         tvItemCount = findViewById(R.id.tv_item_count)
         imageViewBack = findViewById(R.id.imageView4)
 
-        var podcastId: String? = null
+        val podcastId: String? = intent?.getStringExtra("PODCAST_ID")
+        val total: String? = intent?.getIntExtra("PODCAST_COUNT", 0).toString()
+        tvItemCount.text = "Total Episodes : $total"
+
 
         // Ambil data dari Intent
         intent?.let {
             val title = it.getStringExtra("PODCAST_TITLE")
-            val podcastId = it.getStringExtra("PODCAST_ID") // Ambil ID dengan aman
             val imageUrl = it.getStringExtra("PODCAST_IMAGE")
             val description = it.getStringExtra("PODCAST_DESCRIPTION")
-            val total = it.getIntExtra("PODCAST_COUNT", 0)
 
             Log.d("DetailPodcastActivity", "Podcast ID: $podcastId") // Log ID yang diterima
 
             // Set data ke UI
             tvItemName.text = title
             tvItemTotal.text = description
-            tvItemCount.text = "Total Episodes : " + total.toString()
             Glide.with(this).load(imageUrl).into(imgItemPhoto)
-
-            // Pastikan ID tidak null sebelum memanggil API
-            podcastId?.let { id ->
-                Log.d("DetailPodcastActivity", "Podcast ID: $id") // Cetak ID ke Logcat
-                fetchEpisodesData(id) // Kirim ke API
-            } ?: Log.e("DetailPodcastActivity", "Podcast ID is null") // Tampilkan error jika null
 
         }
 
@@ -73,14 +68,31 @@ class DetailPodcastActivity : AppCompatActivity() {
         recyclerViewEpisodes = findViewById(R.id.recyclerViewEpisodes)
         recyclerViewEpisodes.layoutManager =  LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         episodesAdapter = EpisodesListAdapter(emptyList())
-//        { episode ->
-//            val intent = Intent(this, DetailEpisodeActivity::class.java)
-//            intent.putExtra("EPISODE_ID", episode.id) // Kirim ID episode ke DetailEpisodeActivity
-////            intent.putExtra("PODCAST_ID", podcastId) // Kirim ID podcast
-//
-//            startActivity(intent) // Navigasi ke DetailEpisodeActivity
-//        }
+            { episode ->
+            if (episode.id != null && podcastId != null) {
+                Log.d("episodeId", "episodeId: ${episode.id}")
+                Log.d("podcastId", "podcastId: $podcastId")
+                Log.d("episode", "dari Podcast: $total")
+
+
+                val intent = Intent(this, DetailEpisodeActivity::class.java).apply {
+                    putExtra("EPISODE_ID", episode.id)
+                    putExtra("PODCAST_ID", podcastId)
+                    putExtra("PODCAST_COUNT", total)
+
+                }
+                startActivity(intent)
+            } else {
+                Log.e("EpisodesAdapter", "Episode ID or Podcast ID is null")
+            }
+        }
+
+        // Set adapter ke RecyclerView
         recyclerViewEpisodes.adapter = episodesAdapter
+
+        if (podcastId != null) {
+            fetchEpisodesData(podcastId)
+        }
 
         // Tombol kembali ke halaman sebelumnya
         imageViewBack.setOnClickListener { onBackPressed() }

@@ -19,11 +19,11 @@ data class ResponseMedia(
     val has_media: Boolean,
     val playlist_media_id: String?,
     val playlist_media: String?,
-    val media: Play?,
+    val media: Play? = null,
     val has_custom_art: Boolean,
     val art: String,
     val art_updated_at: Long,
-    val links: Links
+    val links: PlayLink
 ) : Parcelable
 
 @Parcelize

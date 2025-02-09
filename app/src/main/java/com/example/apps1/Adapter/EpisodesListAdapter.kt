@@ -11,11 +11,9 @@ import com.bumptech.glide.Glide
 import com.example.apps1.HeaderLoader
 import com.example.apps1.R
 import com.example.apps1.response.ResponseEpisodes
-import com.example.apps1.response.ResponsePodcast
 
-
-class EpisodesListAdapter(private var episodes: List<ResponseEpisodes> ,
-//                          private val onItemClick: (ResponseEpisodes) -> Unit // Listener untuk item klik
+class EpisodesListAdapter(private var episodes: List<ResponseEpisodes>,
+                          private val onItemClick: (ResponseEpisodes) -> Unit // Listener untuk item klik
 
 ) :
     RecyclerView.Adapter<EpisodesListAdapter.EpisodesViewHolder>() {
@@ -50,8 +48,10 @@ class EpisodesListAdapter(private var episodes: List<ResponseEpisodes> ,
             .error(R.drawable.logo_circle_medium)
             .into(holder.imageView)
 
-//        onItemClick(podcast) // Panggil listener saat item diklik
-
+        // Jangan panggil listener langsung di sini tanpa interaksi pengguna
+        holder.itemView.setOnClickListener {
+            onItemClick(podcast) // Listener hanya dipanggil saat item diklik
+        }
     }
 
 

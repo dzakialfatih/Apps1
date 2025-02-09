@@ -21,7 +21,8 @@ import com.bumptech.glide.request.target.Target
 import com.example.apps1.HeaderLoader
 
 
-class PodcastListAdapter(private var podcasts: List<ResponsePodcast>, private val onItemClick: (ResponsePodcast) -> Unit // Tambahkan callback klik
+class PodcastListAdapter(private var podcasts: List<ResponsePodcast>,
+                         private val onItemClick: (ResponsePodcast) -> Unit // Tambahkan callback klik
 ) :
     RecyclerView.Adapter<PodcastListAdapter.PodcastViewHolder>() {
 

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apps1.Adapter.PodcastListAdapter
 import com.example.apps1.Adapter.PodcasterListAdapter
-import com.example.apps1.MainActivity.Podcast
 import com.example.apps1.R
 import com.example.apps1.response.ResponseEpisodes
 import com.example.apps1.response.ResponsePodcast
@@ -20,7 +19,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PodcastActivity : AppCompatActivity() {
+class PodcastActivity : BaseActivity() {
+    override fun getLayoutResource(): Int {
+        return R.layout.activity_podcast
+    }
     private lateinit var recyclerViewPodcasts: RecyclerView
     private lateinit var podcastAdapter: PodcastListAdapter
     private lateinit var recyclerViewPodcaster: RecyclerView
@@ -28,7 +30,6 @@ class PodcastActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_podcast)
 
         recyclerViewPodcasts = findViewById(R.id.recyclerViewPodcasts)
         recyclerViewPodcasts.layoutManager = LinearLayoutManager(this)
@@ -47,7 +48,18 @@ class PodcastActivity : AppCompatActivity() {
         recyclerViewPodcasts.adapter = podcastAdapter
         recyclerViewPodcaster = findViewById(R.id.recyclerViewNamePodcaster)
         recyclerViewPodcaster.layoutManager = LinearLayoutManager(this)
-        podcasterAdapter = PodcasterListAdapter(emptyList())
+        podcasterAdapter = PodcasterListAdapter(emptyList()) { selectedPodcast ->
+            Log.d("PodcastListAdapter", "Selected Podcast ID: ${selectedPodcast.id}") // Log ID
+
+            val intent = Intent(this, DetailPodcastActivity::class.java).apply {
+                putExtra("PODCAST_ID", selectedPodcast.id)
+                putExtra("PODCAST_TITLE", selectedPodcast.title)
+                putExtra("PODCAST_IMAGE", selectedPodcast.art)
+                putExtra("PODCAST_DESCRIPTION", selectedPodcast.description)
+                putExtra("PODCAST_COUNT", selectedPodcast.episodes)
+            }
+            startActivity(intent)
+        }
         recyclerViewPodcaster.adapter = podcasterAdapter
 
         fetchPodcastData()
