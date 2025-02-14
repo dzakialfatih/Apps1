@@ -76,7 +76,6 @@
             android:id="@+id/tv_item_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:text="5 Listened"
             android:textColor="@color/white"
             android:textSize="18sp"

@@ -2,20 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:showIn="navigation_view">
+    tools:showIn="navigation_view"
+    app:itemIconTint="@null">
     <item
         android:id="@+id/nav_youtube"
-        android:title="YouTube" />
+        android:title="YouTube"
+        android:icon="@drawable/ic_yt"/>
 
     <item
         android:id="@+id/nav_instagram"
-        android:title="Instagram" />
+        android:title="Instagram"
+        android:icon="@drawable/ic_ig"/>
 
     <item
         android:id="@+id/nav_x"
-        android:title="X (Twitter)" />
+        android:title="X (Twitter)"
+        android:icon="@drawable/ic_x"/>
 
     <item
         android:id="@+id/nav_facebook"
-        android:title="Facebook" />
+        android:title="Facebook"
+        android:icon="@drawable/ic_fb"/>
 </menu>

@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apps1.Adapter.PodcastListAdapter
 import com.example.apps1.Adapter.PodcasterListAdapter
 import com.example.apps1.R
+import com.example.apps1.databinding.ActivityPodcastBinding
+import com.example.apps1.databinding.ActivityPodcastEpisodesBinding
 import com.example.apps1.response.ResponseEpisodes
 import com.example.apps1.response.ResponsePodcast
 import com.example.apps1.retrofit.ApiConfig
@@ -27,9 +29,12 @@ class PodcastActivity : BaseActivity() {
     private lateinit var podcastAdapter: PodcastListAdapter
     private lateinit var recyclerViewPodcaster: RecyclerView
     private lateinit var podcasterAdapter: PodcasterListAdapter
+    private lateinit var binding: ActivityPodcastBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityPodcastBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         recyclerViewPodcasts = findViewById(R.id.recyclerViewPodcasts)
         recyclerViewPodcasts.layoutManager = LinearLayoutManager(this)
@@ -63,6 +68,8 @@ class PodcastActivity : BaseActivity() {
         recyclerViewPodcaster.adapter = podcasterAdapter
 
         fetchPodcastData()
+        // Tombol kembali ke halaman sebelumnya
+        binding.imageView4.setOnClickListener { onBackPressed() }
     }
 
     private fun fetchPodcastData() {

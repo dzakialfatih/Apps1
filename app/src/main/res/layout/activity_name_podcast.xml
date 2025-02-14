@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="50dp"
         android:backgroundTint="@color/yellow"
         android:hint="@string/searchbar_hint_who"
         app:layout_constraintTop_toTopOf="parent"

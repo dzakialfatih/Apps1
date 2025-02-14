@@ -70,6 +70,9 @@ class MainActivity : BaseActivity() {
         val actionMenu = findViewById<ImageView>(R.id.action_menu)
         val navigationView = findViewById<NavigationView>(R.id.navigation_view)
 
+        // Memastikan ikon tetap berwarna asli
+        navigationView.itemIconTintList = null
+
         // Buka Sidebar saat Menu Diklik
         actionMenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
@@ -247,7 +250,7 @@ class MainActivity : BaseActivity() {
                     rotateAnimation?.start()
                 }
 
-                Toast.makeText(this, "Radio Playing", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Radio Diputar", Toast.LENGTH_SHORT).show()
                 Log.d("MainActivity", "Radio started playing.")
                 Log.d("MainActivity", "Radio started.")
             } else {
@@ -271,7 +274,7 @@ class MainActivity : BaseActivity() {
             rotateAnimation = null // Reset agar bisa diputar ulang nanti
             radioButton.clearAnimation() // (Opsional, untuk berjaga-jaga)
 
-            Toast.makeText(this, "Radio Stopped", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Radio Berhenti", Toast.LENGTH_SHORT).show()
 
             Log.d("MainActivity", "Radio stopped and player released.")
         } catch (e: Exception) {
