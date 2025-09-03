@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.example.apps1"
-    compileSdk = 34
+    compileSdk = 35
     buildFeatures {
         viewBinding = true
     }
@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId = "com.example.apps1"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -63,6 +63,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation(libs.androidx.databinding.runtime)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.media3.exoplayer)
     testImplementation(libs.junit)
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")

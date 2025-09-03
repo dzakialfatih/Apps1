@@ -21,7 +21,8 @@ class CircleTransform : BitmapTransformation() {
         val y = (source.height - size) / 2
 
         val squaredBitmap = Bitmap.createBitmap(source, x, y, size, size)
-        val bitmap = Bitmap.createBitmap(size, size, source.config)
+        val bitmap = Bitmap.createBitmap(size, size, source.config ?: Bitmap.Config.ARGB_8888)
+
 
         val canvas = Canvas(bitmap)
         val paint = Paint().apply {
