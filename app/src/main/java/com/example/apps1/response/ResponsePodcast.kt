@@ -5,28 +5,29 @@ import android.os.Parcelable
 
 @Parcelize
 data class ResponsePodcast(
-	val art: String? = null,
-	val brandingConfig: BrandingConfig? = null,
-	val author: String? = null,
-	val isPublished: Boolean? = null,
-	val storageLocationId: Int? = null,
-	val link: String? = null,
-	val description: String? = null,
-	val language: String? = null,
-	val source: String? = null,
-	val title: String? = null,
-	val isEnabled: Boolean? = null,
-	val artUpdatedAt: Int? = null,
-	val descriptionShort: String? = null,
-	val hasCustomArt: Boolean? = null,
-	val playlistId: Int? = null,
-	val links: Links? = null,
-	val id: String? = null,
-	val languageName: String? = null,
-	val categories: List<CategoriesItem?>? = null,
-	val playlistAutoPublish: Boolean? = null,
-	val email: String? = null,
-	val episodes: Int? = null
+    val art: String? = null,
+    val brandingConfig: BrandingConfig? = null,
+    val author: String? = null,
+    val isPublished: Boolean? = null,
+    val storageLocationId: Int? = null,
+    val link: String? = null,
+    val description: String? = null,
+    val language: String? = null,
+    val source: String? = null,
+    val title: String? = null,
+    val isEnabled: Boolean? = null,
+    val artUpdatedAt: Int? = null,
+    val descriptionShort: String? = null,
+    val hasCustomArt: Boolean? = null,
+    val playlistId: Int? = null,
+    val links: Links? = null,
+    val id: Int? = null,
+    val languageName: String? = null,
+    val categories: List<CategoriesItem?>? = null,
+    val playlistAutoPublish: Boolean? = null,
+    val email: String? = null,
+    val episodes: Int? = null,
+    val url: String
 ) : Parcelable
 
 
@@ -54,3 +55,4 @@ data class Links(
 	val episodeNewArt: String? = null,
 	val episodes: String? = null
 ) : Parcelable
+

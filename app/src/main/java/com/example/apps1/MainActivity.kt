@@ -12,7 +12,6 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -352,18 +351,18 @@ class MainActivity : BaseActivity() {
 
     private val dummyPodcasts = listOf(
         ResponsePodcast(
-            id = "1",
-            title = "Podcast Seru Bareng Prambors",
-            description = "Ngobrolin tren musik, lifestyle, dan cerita seru anak muda.",
-            art = "https://via.placeholder.com/300",
-            episodes = 10
+            id = 4,
+            title = "Rintik Sedu",
+            description = "Podcast bercerita tentang pengalaman hidup, motivasi, dan renungan sehari-hari yang menyentuh hati.",
+            art = "https://via.placeholder.com/150?text=RintikSedu",
+            url = "https://example.com/rintiksedu"
         ),
         ResponsePodcast(
-            id = "2",
-            title = "Ngobrol Bareng Musisi",
-            description = "Eksklusif interview musisi Indonesia.",
-            art = "https://via.placeholder.com/300",
-            episodes = 8
+            id = 3,
+            title = "Temu Kangen",
+            description = "Podcast yang menghadirkan cerita-cerita menarik dan candaan segar dari para pembawa acara profesional.",
+            art = "https://via.placeholder.com/150?text=TemuKangen",
+            url = "https://example.com/temukangen"
         )
     )
 
